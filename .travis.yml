@@ -1,4 +1,7 @@
 sudo: required
+
+language: generic
+
 services:
     - docker
     
@@ -8,4 +11,15 @@ before_install:
 script:
     - docker run -e CI=true crosscutsaw/docker-react npm run test -- --coverage
     
-language: generic
+deploy:
+    provider: elasticbeanstalk
+    region: "us-west-2"
+    app: "docker-react"
+    env: "Docker-env"
+    bucket_name: "elasticbeanstalk-us-west-2-306476627547"
+    bucket_path: "docker-react"
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key:
+        secure: "$AWS_SECRET_KEY"
